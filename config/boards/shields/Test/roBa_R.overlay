@@ -11,14 +11,14 @@
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
-        , <&xiao_d 9 GPIO_ACTIVE_HIGH> 
+        /* , <&xiao_d 9 GPIO_ACTIVE_HIGH>  ←【修正】この行を削除しました（競合回避） */
         , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
         , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
         , <&gpio0 10 GPIO_ACTIVE_HIGH>
         ;
 };
 
-/* 安全のためI2Cを無効化（念の為入れておきます） */
+/* 安全のためI2Cを無効化 */
 &i2c0 { status = "disabled"; };
 
 /* ▼▼▼ トラックボール設定 ▼▼▼ */
@@ -34,11 +34,10 @@
                              , <&zip_scroll_scaler 1 64>;
         };
 
-        /* ② それ以外の時：カーソル移動（ここを追加！） */
+        /* ② それ以外の時：カーソル移動 */
         default_movement {
-            /* 普段使うレイヤーをすべて列挙します */
-            layers = <0 1 2 3 4 6>; 
-              input-processors = <&zip_xy_scaler 1 1>;
+            /* 【修正】layersの行を削除しました。これで「全レイヤー」で動きます */
+            input-processors = <&zip_xy_scaler 1 1>;
         };
     };
 };
@@ -68,9 +67,7 @@
     pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
     
-    /* 【重要】一番最初の「動いていたコード」の設定に戻しました。
-       物理的にここに繋がっているなら、ここを変えてはいけませんでした。失礼しました。
-    */
+    /* トラックボールのCSピン (D9) */
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     trackball: trackball@0 {
@@ -81,8 +78,6 @@
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         res-cpi = <600>;
         
-        /* ▼▼▼ 向きの修正 ▼▼▼ */
-        /* 90度ずれていたとのことなので、XとYの指定を「素直な設定」に戻しました */
         zephyr,axis-x = <INPUT_REL_X>;
         zephyr,axis-y = <INPUT_REL_Y>;
     };
