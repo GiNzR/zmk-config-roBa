@@ -16,36 +16,41 @@
         ;
 };
 
-/* ▼▼▼ ここが新しい「スクロール設定」の魔法です ▼▼▼ */
 / {
+    /* ▼▼▼ 1. 足りなかった「スクロール変換機」の定義を追加しました ▼▼▼ */
+    zip_xy_to_scroll_mapper: zip_xy_to_scroll_mapper {
+        compatible = "zmk,input-processor-scaler";
+        #input-processor-cells = <2>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_HWHEEL INPUT_REL_WHEEL>; /* 横スクロール、縦スクロール */
+        track-underrun-remainder;
+    };
+    /* ▲▲▲ 定義はここまで ▲▲▲ */
+
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
-        /* 1. 通常時の設定（カーソル移動） */
-        /* もしカーソル速度を変えたい場合はここに &zip_xy_scaler を書きます */
-
         /* 2. レイヤー5（SCROLL）の時だけ発動する設定 */
         scroll_layer {
-            layers = <5>; /* レイヤー5の時だけ有効 */
-            input-processors = <&zip_xy_to_scroll_mapper>; /* 動きをスクロールに変換！ */
+            layers = <5>;
+            input-processors = <&zip_xy_to_scroll_mapper 1 1>; /* 定義した変換機を使用 */
         };
     };
 };
-/* ▲▲▲ ここまで ▲▲▲ */
 
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>;
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISO削除済みOK */
         };
     };
 
     spi0_sleep: spi0_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>;
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISO削除済みOK */
             low-power-enable;
         };
     };
@@ -69,8 +74,12 @@
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         res-cpi = <600>;
         
-        /* カーソルの向き設定（前回の設定を引き継いでいます） */
+        /* 向きの補正（右→下、上→右 の現象への対策） */
         zephyr,axis-x = <INPUT_REL_Y>;
         zephyr,axis-y = <INPUT_REL_X>;
+        
+        /* ※もしこれで動く向きが「逆」だったら、以下のコメント( // )を外して有効化します */
+        // invert-x;
+        // invert-y;
     };
 };
