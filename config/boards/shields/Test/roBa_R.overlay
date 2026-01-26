@@ -36,7 +36,9 @@
             /* 【重要】ここに普段使うレイヤー番号をすべて列挙してください */
             /* 例: レイヤー5以外 (0, 1, 2, 3, 4, 6) */
             layers = <0 1 2 3 4 6>; 
-            input-processors = <&zip_xy_scaler 1 1>;
+            input-processors =
+                <&zip_xy_to_mouse_mapper>
+                , <&zip_xy_scaler 1 1>;
         };
     };
 };
