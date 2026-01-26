@@ -2,15 +2,20 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: kumamuk-git
-      url-base: https://github.com/kumamuk-git
+    - name: seeed-studio
+      url-base: https://github.com/Seeed-Studio
+    - name: badjeff
+      url-base: https://github.com/badjeff
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
+    - name: xiao_ble
+      remote: seeed-studio
+      revision: main
     - name: zmk-input-behavior-listener
-      url: https://github.com/badjeff/zmk-input-behavior-listener
+      remote: badjeff
       revision: main
   self:
     path: config
