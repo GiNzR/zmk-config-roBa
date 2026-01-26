@@ -9,5 +9,8 @@ manifest:
       remote: zmkfirmware
       revision: main
       import: app/west.yml
+    - name: zmk-input-behavior-listener
+      url: https://github.com/badjeff/zmk-input-behavior-listener
+      revision: main
   self:
     path: config
