@@ -17,24 +17,21 @@
 };
 
 / {
-    /* トラックボールのリスナー定義（ここに追加！） */
-    /* これをここに書くことで、右手側（roBa_R）だけで有効になります */
+    /* 1. 足りなかった部品（スケーラー）の定義を作成 */
+    ib_wheel_scaler: ib_wheel_scaler {
+        compatible = "zmk,input-behavior-scaler";
+        #binding-cells = <2>;
+        evt-type = <INPUT_EV_REL>;
+    };
+
+    /* 2. スクロール機能の設定（ここなら右手側だけに適用されます） */
     scroll_listener {
         compatible = "zmk,input-behavior-listener";
         device = <&trackball>;
-        layers = <5>; /* レイヤー5でスクロール有効 */
+        layers = <5>; /* レイヤー5で有効 */
         evt-type = <INPUT_EV_REL>;
-        
-        /* X軸(横)の動きを、横スクロール(REL_HWHEEL)に割り当て */
         x-input-code = <INPUT_REL_HWHEEL>;
-        
-        /* Y軸(縦)の動きを、縦スクロール(REL_WHEEL)に割り当て */
         y-input-code = <INPUT_REL_WHEEL>;
-        
-        /* スクロールの向きを逆にする場合はここを有効化（y-invert） */
-        /* y-invert; */
-        
-        /* スクロール速度の調整（数値を変えると感度が変わります） */
         bindings = <&ib_wheel_scaler 1 16>;
     };
 };
@@ -73,10 +70,8 @@
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        
-        /* 公式ドライバ設定 */
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        res-cpi = <600>; /* 感度(DPI) */
+        res-cpi = <600>;
         zephyr,axis-x = <INPUT_REL_X>;
         zephyr,axis-y = <INPUT_REL_Y>;
     };
