@@ -25,26 +25,6 @@
         };
     };
 
-/* トラックボールのリスナー定義 */
-    /* レイヤー5が有効なときだけ、トラックボールの動きをスクロールに変換します */
-    scroll_listener {
-        compatible = "zmk,input-behavior-listener";
-        device = <&trackball>;
-        layers = <5>; /* ここでスクロールさせるレイヤーを指定 */
-        evt-type = <INPUT_EV_REL>;
-        
-        /* X軸(横)の動きを、横スクロール(REL_HWHEEL)に割り当て */
-        x-input-code = <INPUT_REL_HWHEEL>;
-        
-        /* Y軸(縦)の動きを、縦スクロール(REL_WHEEL)に割り当て */
-        y-input-code = <INPUT_REL_WHEEL>;
-        
-        /* スクロールの向きを逆にする場合はここを有効化（y-invert） */
-        /* y-invert; */
-        
-        /* スクロール速度の調整（数値を変えると感度が変わります） */
-        bindings = <&ib_wheel_scaler 1 16>;
-    };
 
     behaviors {
         lt_to_layer_0: lt_to_layer_0 {
