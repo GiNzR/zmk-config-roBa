@@ -16,20 +16,29 @@
         ;
 };
 
-/* トラックボールのリスナー */
+/* ▼▼▼ ここが新しい「スクロール設定」の魔法です ▼▼▼ */
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
+
+        /* 1. 通常時の設定（カーソル移動） */
+        /* もしカーソル速度を変えたい場合はここに &zip_xy_scaler を書きます */
+
+        /* 2. レイヤー5（SCROLL）の時だけ発動する設定 */
+        scroll_layer {
+            layers = <5>; /* レイヤー5の時だけ有効 */
+            input-processors = <&zip_xy_to_scroll_mapper>; /* 動きをスクロールに変換！ */
+        };
     };
 };
+/* ▲▲▲ ここまで ▲▲▲ */
 
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
                 <NRF_PSEL(SPIM_MOSI, 0, 4)>;
-                /* ★修正箇所: MISOの行を削除しました */
         };
     };
 
@@ -37,7 +46,6 @@
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
                 <NRF_PSEL(SPIM_MOSI, 0, 4)>;
-                /* ★修正箇所: MISOの行を削除しました */
             low-power-enable;
         };
     };
@@ -60,7 +68,9 @@
         spi-max-frequency = <2000000>;
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         res-cpi = <600>;
-        zephyr,axis-x = <INPUT_REL_X>;
-        zephyr,axis-y = <INPUT_REL_Y>;
+        
+        /* カーソルの向き設定（前回の設定を引き継いでいます） */
+        zephyr,axis-x = <INPUT_REL_Y>;
+        zephyr,axis-y = <INPUT_REL_X>;
     };
 };
