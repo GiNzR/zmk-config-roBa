@@ -18,30 +18,31 @@
         ;
 };
 
-/* ▼▼▼ トラックボールの挙動設定（修正版） ▼▼▼ */
+/* 安全のためI2Cを無効化（念の為入れておきます） */
+&i2c0 { status = "disabled"; };
+
+/* ▼▼▼ トラックボール設定 ▼▼▼ */
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
-        /* ① レイヤー5の時：スクロールモード */
+        /* ① レイヤー5の時：スクロール */
         scroller {
             layers = <5>;
             input-processors = <&zip_xy_to_scroll_mapper>
                              , <&zip_scroll_scaler 1 64>;
         };
 
-        /* ② それ以外の時：マウスカーソル移動 */
+        /* ② それ以外の時：カーソル移動（ここを追加！） */
         default_movement {
-            /* 【重要】ここに普段使うレイヤー番号をすべて列挙してください */
-            /* 例: レイヤー5以外 (0, 1, 2, 3, 4, 6) */
+            /* 普段使うレイヤーをすべて列挙します */
             layers = <0 1 2 3 4 6>; 
             input-processors = <&zip_xy_scaler 1 1>;
         };
     };
 };
 
-/* ▼▼▼ ピン設定（動いた実績のある設定を維持） ▼▼▼ */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
@@ -67,7 +68,9 @@
     pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
     
-    /* 動いた時のCSピン設定を維持 */
+    /* 【重要】一番最初の「動いていたコード」の設定に戻しました。
+       物理的にここに繋がっているなら、ここを変えてはいけませんでした。失礼しました。
+    */
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     trackball: trackball@0 {
@@ -78,14 +81,9 @@
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         res-cpi = <600>;
         
-        /* ▼▼▼ 向きの修正箇所 ▼▼▼ */
-        /* 90度ずれていたため、入れ替えをやめて標準に戻しました */
+        /* ▼▼▼ 向きの修正 ▼▼▼ */
+        /* 90度ずれていたとのことなので、XとYの指定を「素直な設定」に戻しました */
         zephyr,axis-x = <INPUT_REL_X>;
         zephyr,axis-y = <INPUT_REL_Y>;
     };
-};
-
-/* これがないと、SPI通信（トラックボール）とI2Cがケンカして接続が切れます */
-&i2c0 {
-    status = "disabled";
 };
