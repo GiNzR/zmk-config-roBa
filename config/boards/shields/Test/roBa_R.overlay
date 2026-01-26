@@ -16,26 +16,6 @@
         ;
 };
 
-/ {
-    /* 1. 足りなかった部品（スケーラー）の定義を作成 */
-    ib_wheel_scaler: ib_wheel_scaler {
-        compatible = "zmk,input-behavior-scaler";
-        #binding-cells = <2>;
-        evt-type = <INPUT_EV_REL>;
-    };
-
-    /* 2. スクロール機能の設定（ここなら右手側だけに適用されます） */
-    scroll_listener {
-        compatible = "zmk,input-behavior-listener";
-        device = <&trackball>;
-        layers = <5>; /* レイヤー5で有効 */
-        evt-type = <INPUT_EV_REL>;
-        x-input-code = <INPUT_REL_HWHEEL>;
-        y-input-code = <INPUT_REL_WHEEL>;
-        bindings = <&ib_wheel_scaler 1 16>;
-    };
-};
-
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
