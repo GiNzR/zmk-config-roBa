@@ -24,13 +24,11 @@
         };
     };
 
-
     behaviors {
         lt_to_layer_0: lt_to_layer_0 {
             compatible = "zmk,behavior-hold-tap";
             label = "LAYER_TAP_TO_0";
             bindings = <&mo>, <&to_layer_0>;
-
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
@@ -41,67 +39,33 @@
 
         default_layer {
             bindings = <
-&kp Q     &kp W         &kp E              &kp R      &kp T                                                      &kp Y        &kp U  &kp I      &kp O    &kp P
-&kp A     &kp S         &kp D              &kp F      &kp G                 &lt 4 LC(HOME)      &kp END          &kp H        &kp J  &kp K      &kp L    &kp BACKSPACE
-&kp Z     &kp X         &kp C              &kp V      &kp B                 &lt 5 SLASH         &mt RCTRL MINUS  &kp N        &kp M  &kp COMMA  &kp DOT  &kp HASH
-&mkp MB2  &kp LEFT_WIN  &mt LEFT_ALT EXCL  &kp LG(H)  &mt LEFT_SHIFT SPACE  &mkp MB1            &lt 2 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESCAPE
+&kp Q     &kp W         &kp E          &kp R          &kp T                                        &kp Y        &kp U  &kp I      &kp O    &kp P
+&kp A     &kp S         &kp D          &kp F          &kp G             &lt 4 LC(HOME)       &kp END          &kp H        &kp J  &kp K      &kp L    &kp BACKSPACE
+&kp Z     &kp X         &kp C          &kp V          &kp B             &lt 5 SLASH          &mt RCTRL MINUS  &kp N        &kp M  &kp COMMA  &kp DOT  &kp HASH
+&mkp MB2  &kp LEFT_WIN  &mt LEFT_ALT EXCL  &kp LG(H)  &mt LEFT_SHIFT SPACE  &mkp MB1             &lt 2 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESCAPE
             >;
         };
 
         NUM {
             bindings = <
-&kp ESCAPE       &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp PLUS                                                               &kp CARET       &kp AMPERSAND  &kp UP_ARROW  &kp PERCENT       &kp TILDE
-&kp TAB          &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp SEMICOLON         &kp LEFT_PARENTHESIS      &kp RIGHT_PARENTHESIS  &kp AT_SIGN     &kp LEFT       &kp DOWN      &kp RIGHT         &kp BACKSPACE
-&kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp COMMA             &kp EQUAL                 &kp F5                 &kp APOSTROPHE  &mkp MB4       &mkp MB5      &kp LEFT_BRACKET  &kp RIGHT_BRACKET
-&kp LEFT_SHIFT   &kp DOLLAR       &kp ASTRK        &kp LG(TAB)      &mt LEFT_SHIFT SPACE  &mkp MB1                  &trans                 &trans                                                         &kp BACKSLASH
+&kp ESCAPE       &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp PLUS                                                   &kp CARET        &kp AMPERSAND  &kp UP_ARROW  &kp PERCENT      &kp TILDE
+&kp TAB          &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp SEMICOLON         &kp LEFT_PARENTHESIS       &kp RIGHT_PARENTHESIS  &kp AT_SIGN      &kp LEFT        &kp DOWN      &kp RIGHT         &kp BACKSPACE
+&kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp COMMA             &kp EQUAL                  &kp F5                 &kp APOSTROPHE  &mkp MB4        &mkp MB5       &kp LEFT_BRACKET  &kp RIGHT_BRACKET
+&kp LEFT_SHIFT   &kp DOLLAR       &kp ASTRK        &kp LG(TAB)      &mt LEFT_SHIFT SPACE  &mkp MB1                   &trans                 &trans                                          &kp BACKSLASH
             >;
         };
 
         FUNCTION {
             bindings = <
-&trans  &trans  &trans  &trans  &trans                         &kp F1   &kp F2   &kp F3   &kp F4   &kp F5
-&trans  &trans  &trans  &trans  &trans     &trans      &trans  &kp F6   &kp F7   &kp F8   &kp F9   &kp F10
-&trans  &trans  &trans  &trans  &trans     &trans      &trans  &kp F11  &kp F12  &kp F13  &kp F14  &kp F15
-&trans  &trans  &trans  &trans  &kp SPACE  &trans      &trans  &trans                              &kp F16
+&trans  &trans  &trans  &trans  &trans                  &kp F1   &kp F2   &kp F3   &kp F4   &kp F5
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp F6   &kp F7   &kp F8   &kp F9   &kp F10
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp F11  &kp F12  &kp F13  &kp F14  &kp F15
+&trans  &trans  &trans  &trans  &kp SPACE  &trans  &trans  &trans                             &kp F16
             >;
         };
 
         ARROW {
             bindings = <
-&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp LC(TAB)              &trans                       &trans  &trans  &trans  &trans  &trans
-&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &trans          &kp LG(LS(RIGHT_ARROW))  &trans   &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans          &trans                  &trans          &trans                   &trans   &trans      &trans  &trans                          &trans
-            >;
-
-            sensor-bindings = <&inc_dec_kp LC(PAGE_UP) LC(PAGE_DOWN)>;
-        };
-
-        layer_6 {
-            bindings = <
-&trans  &trans        &trans        &trans        &trans                           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans  &trans        &trans        &trans        &trans  &trans      &trans       &trans        &trans        &trans        &trans        &trans
-&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans      &bootloader  &trans        &trans        &trans        &trans        &bt BT_CLR
-&trans  &trans        &trans        &trans        &trans  &trans      &trans       &trans                                                  &bt BT_CLR_ALL
-            >;
-        };
-
-        SCROLL {
-            bindings = <
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                          &trans
-            >;
-        };
-    };
-
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-
-        scroll {
-            if-layers = <5>;
-            then-layer = <5>;
-        };
-    };
-};
+&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW          &kp LC(TAB)          &trans                               &trans  &trans  &trans  &trans  &trans
+&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW        &kp RIGHT_ARROW      &kp END   &trans       &trans  &trans  &trans  &trans  &trans  &trans
+&kp LEFT_SHIFT  &kp LG(LS(LEFT_
