@@ -1,4 +1,5 @@
 #include "roBa.dtsi"
+#include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/input/input-event-codes.h>
 
 &default_transform {
@@ -16,9 +17,25 @@
 };
 
 / {
-    trackball_listener {
-        compatible = "zmk,input-listener";
+    /* トラックボールのリスナー定義（ここに追加！） */
+    /* これをここに書くことで、右手側（roBa_R）だけで有効になります */
+    scroll_listener {
+        compatible = "zmk,input-behavior-listener";
         device = <&trackball>;
+        layers = <5>; /* レイヤー5でスクロール有効 */
+        evt-type = <INPUT_EV_REL>;
+        
+        /* X軸(横)の動きを、横スクロール(REL_HWHEEL)に割り当て */
+        x-input-code = <INPUT_REL_HWHEEL>;
+        
+        /* Y軸(縦)の動きを、縦スクロール(REL_WHEEL)に割り当て */
+        y-input-code = <INPUT_REL_WHEEL>;
+        
+        /* スクロールの向きを逆にする場合はここを有効化（y-invert） */
+        /* y-invert; */
+        
+        /* スクロール速度の調整（数値を変えると感度が変わります） */
+        bindings = <&ib_wheel_scaler 1 16>;
     };
 };
 
@@ -57,12 +74,10 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         
-        /* 修正箇所: 新しい公式ドライバの書き方に変更 */
+        /* 公式ドライバ設定 */
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        res-cpi = <600>; /* 感度(DPI)設定。数値を変えると速度が変わります */
+        res-cpi = <600>; /* 感度(DPI) */
         zephyr,axis-x = <INPUT_REL_X>;
         zephyr,axis-y = <INPUT_REL_Y>;
-
-        /* scroll-layers = <5>; は公式ドライバでエラーになるため削除しました */
     };
 };
