@@ -38,7 +38,9 @@
         default_movement {
             /* 普段使うレイヤーをすべて列挙します */
             layers = <0 1 2 3 4 6>; 
-            input-processors = <&zip_xy_scaler 1 1>;
+             input-processors =
+                <&zip_xy_to_mouse_mapper>
+                , <&zip_xy_scaler 1 1>;
         };
     };
 };
