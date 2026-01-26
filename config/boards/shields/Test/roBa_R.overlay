@@ -1,6 +1,8 @@
 #include "roBa.dtsi"
 #include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/input/input-event-codes.h>
+#include <dt-bindings/zmk/input_transform.h>
+#include <input/processors.dtsi> /* ← これが必要です！ */
 
 &default_transform {
     col-offset = <6>;
@@ -16,41 +18,36 @@
         ;
 };
 
+/* ▼▼▼ トラックボールとスクロールの設定 ▼▼▼ */
 / {
-    /* ▼▼▼ 1. 足りなかった「スクロール変換機」の定義を追加しました ▼▼▼ */
-    zip_xy_to_scroll_mapper: zip_xy_to_scroll_mapper {
-        compatible = "zmk,input-processor-scaler";
-        #input-processor-cells = <2>;
-        type = <INPUT_EV_REL>;
-        codes = <INPUT_REL_HWHEEL INPUT_REL_WHEEL>; /* 横スクロール、縦スクロール */
-        track-underrun-remainder;
-    };
-    /* ▲▲▲ 定義はここまで ▲▲▲ */
-
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
-        /* 2. レイヤー5（SCROLL）の時だけ発動する設定 */
-        scroll_layer {
-            layers = <5>;
-            input-processors = <&zip_xy_to_scroll_mapper 1 1>; /* 定義した変換機を使用 */
+        /* レイヤー5の時だけスクロールモードにする設定 */
+        scroller {
+            layers = <5>; /* レイヤー5で有効化 */
+            input-processors =
+                <&zip_xy_to_scroll_mapper> /* 動きをスクロールに変換 */
+                , <&zip_scroll_scaler 1 64>; /* 感度調整（分母64を増やすと遅くなる） */
+                /* 必要に応じてここに transform などを追加できます */
         };
     };
 };
+/* ▲▲▲ 設定ここまで ▲▲▲ */
 
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISO削除済みOK */
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISOなしOK */
         };
     };
 
     spi0_sleep: spi0_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISO削除済みOK */
+                <NRF_PSEL(SPIM_MOSI, 0, 4)>; /* MISOなしOK */
             low-power-enable;
         };
     };
@@ -74,12 +71,8 @@
         motion-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         res-cpi = <600>;
         
-        /* 向きの補正（右→下、上→右 の現象への対策） */
+        /* 向きの補正（前回の設定を維持：XとYを入れ替え） */
         zephyr,axis-x = <INPUT_REL_Y>;
         zephyr,axis-y = <INPUT_REL_X>;
-        
-        /* ※もしこれで動く向きが「逆」だったら、以下のコメント( // )を外して有効化します */
-        // invert-x;
-        // invert-y;
     };
 };
