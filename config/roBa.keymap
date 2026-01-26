@@ -94,13 +94,4 @@
             >;
         };
     };
-
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-
-        scroll {
-            if-layers = <5>;
-            then-layer = <5>;
-        };
-    };
 };
