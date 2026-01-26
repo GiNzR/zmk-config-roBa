@@ -84,3 +84,8 @@
         zephyr,axis-y = <INPUT_REL_Y>;
     };
 };
+
+/* これがないと、SPI通信（トラックボール）とI2Cがケンカして接続が切れます */
+&i2c0 {
+    status = "disabled";
+};
