@@ -8,7 +8,8 @@
     col-offset = <6>;
 };
 
-/* ▼▼▼ 1. キーマトリクス設定（D9ピン回避・5列維持） ▼▼▼ */
+/* ▼▼▼ 1. キーマトリクス設定（接続エラー対策） ▼▼▼ */
+/* D9ピンを除外し、列数(5)を維持するためにダミーピン(gpio0 11)を設定 */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
@@ -21,38 +22,27 @@
 
 &i2c0 { status = "disabled"; };
 
-/* ▼▼▼ 2. 回転設定（修正箇所） ▼▼▼ */
-/ {
-  trackball_rotate: trackball_rotate {
-      compatible = "zmk,input-processor-transform";
-      
-      /* ★修正★ エラーログの要求に従い 0 から 1 に変更 */
-      #input-processor-cells = <1>;
-      
-      xy-swap;
-      x-invert;
-      x-codes = <INPUT_REL_X>;
-      y-codes = <INPUT_REL_Y>;
-  };
-};
-
-/* ▼▼▼ 3. トラックボール動作設定 ▼▼▼ */
+/* ▼▼▼ 2. トラックボール設定（ZMK標準機能を使用） ▼▼▼ */
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
-        /* レイヤー5: スクロール */
+        /* ① レイヤー5の時：スクロール */
         scroller {
             layers = <5>;
             input-processors = <&zip_xy_to_scroll_mapper>;
         };
 
-        /* その他のレイヤー: カーソル移動 */
+        /* ② それ以外の時：カーソル移動（90度回転適用） */
         default_movement {
             layers = <0 1 2 3 4 6>;
-            /* ★修正★ cells=1 に合わせたので、ダミー引数「0」を追加 */
-            input-processors = <&trackball_rotate 0>;
+            /* * ここで回転を設定します。
+             * INPUT_TRANSFORM_XY_SWAP : 縦横の入れ替え
+             * INPUT_TRANSFORM_Y_INVERT : Y方向の反転
+             * (組み合わせることで90度回転を実現しています)
+             */
+            input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
         };
     };
 };
