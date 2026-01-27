@@ -1,7 +1,15 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/zmk/pointing.h>
+
+#ifndef SCROLL_UP
+#define SCROLL_UP 0x01
+#define SCROLL_DOWN 0x02
+#define SCROLL_LEFT 0x04
+#define SCROLL_RIGHT 0x08
+#endif
 
 #define MOUSE 4
 #define SCROLL 5
@@ -87,10 +95,10 @@
 
         SCROLL {
             bindings = <
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                          &trans
+&trans  &trans  &trans  &trans  &trans                      &trans  &trans          &trans           &trans           &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &msc SCROLL_LEFT  &msc SCROLL_DOWN  &msc SCROLL_UP  &msc SCROLL_RIGHT  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans          &trans           &trans           &trans           &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                                      &trans
             >;
         };
     };
