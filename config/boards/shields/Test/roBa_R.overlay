@@ -8,11 +8,12 @@
     col-offset = <6>;
 };
 
-/* ▼▼▼ キーマトリクス設定（D9ピンを除外） ▼▼▼ */
+/* 1. キーマトリクスの修正 */
+/* 列の数を5つに保ちつつ、D9ピン(xiao_d 9)の競合を避けるためダミーピンに割り当てます */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
-        /* , <&xiao_d 9 GPIO_ACTIVE_HIGH>  ← ピン競合回避のため削除済み */
+        , <&gpio0 11 GPIO_ACTIVE_HIGH>  /* D9の代わりに未使用ピン(P0.11)をダミーとして設定 */
         , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
         , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
         , <&gpio0 10 GPIO_ACTIVE_HIGH>
@@ -21,7 +22,17 @@
 
 &i2c0 { status = "disabled"; };
 
-/* ▼▼▼ トラックボール設定 ▼▼▼ */
+/* 2. トラックボールの回転設定（90度補正用） */
+/* XとYを入れ替え(Swap)し、必要なら反転(Invert)させます */
+/ {
+    trackball_rotate: trackball_rotate {
+        compatible = "zmk,input-processor-transform";
+        xy-swap;
+        x-invert; /* 90度回転の場合、Swapに加えて片方の軸の反転が必要なことが多いです */
+    };
+};
+
+/* 3. トラックボール設定 */
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
@@ -30,15 +41,15 @@
         /* ① レイヤー5の時：スクロール */
         scroller {
             layers = <5>;
-            input-processors = <&zip_xy_to_scroll_mapper>
-                             , <&zip_scroll_scaler 1 64>;
+            /* スクロールマッパーを適用 */
+            input-processors = <&zip_xy_to_scroll_mapper>;
         };
 
-        /* ② それ以外の時：カーソル移動 */
+        /* ② それ以外の時：カーソル移動（回転補正付き） */
         default_movement {
-            /* 【修正】ここが必須でした。レイヤー5以外をすべて書きます */
             layers = <0 1 2 3 4 6>;
-            input-processors = <&zip_xy_scaler 1 1>;
+            /* 定義した回転設定を適用 */
+            input-processors = <&trackball_rotate>;
         };
     };
 };
