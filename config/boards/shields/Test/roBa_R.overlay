@@ -22,6 +22,10 @@
         compatible = "zmk,input-listener";
         device = <&trackball>;
     };
+
+    trackball_rotate {
+        /delete-property/ xy-swap;
+    };
 };
 
 &pinctrl {
