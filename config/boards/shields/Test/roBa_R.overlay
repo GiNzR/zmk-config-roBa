@@ -9,7 +9,6 @@
 };
 
 /* ▼▼▼ 1. キーマトリクス設定（接続エラー対策） ▼▼▼ */
-/* 列数を5に保つため、D9ピンの箇所を未使用ピン(P0.11)で埋めています */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
@@ -22,14 +21,15 @@
 
 &i2c0 { status = "disabled"; };
 
-/* ▼▼▼ 2. 回転設定（ビルドエラー対策済み） ▼▼▼ */
-/* 90度回転用にXYを入れ替え、補正します */
+/* ▼▼▼ 2. 回転設定（修正：必須行を追加しました） ▼▼▼ */
 / {
   trackball_rotate: trackball_rotate {
       compatible = "zmk,input-processor-transform";
+      /* ★追加修正: 以下の1行が不足していました★ */
+      #input-processor-cells = <0>;
+      
       xy-swap;
       x-invert;
-      /* 必須プロパティを追加 */
       x-codes = <INPUT_REL_X>;
       y-codes = <INPUT_REL_Y>;
   };
