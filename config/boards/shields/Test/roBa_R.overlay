@@ -8,7 +8,7 @@
     col-offset = <6>;
 };
 
-/* ▼▼▼ 1. キーマトリクス設定（接続エラー対策） ▼▼▼ */
+/* ▼▼▼ 1. キーマトリクス設定（D9ピン回避・5列維持） ▼▼▼ */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
@@ -21,12 +21,13 @@
 
 &i2c0 { status = "disabled"; };
 
-/* ▼▼▼ 2. 回転設定（修正：必須行を追加しました） ▼▼▼ */
+/* ▼▼▼ 2. 回転設定（修正箇所） ▼▼▼ */
 / {
   trackball_rotate: trackball_rotate {
       compatible = "zmk,input-processor-transform";
-      /* ★追加修正: 以下の1行が不足していました★ */
-      #input-processor-cells = <0>;
+      
+      /* ★修正★ エラーログの要求に従い 0 から 1 に変更 */
+      #input-processor-cells = <1>;
       
       xy-swap;
       x-invert;
@@ -47,10 +48,11 @@
             input-processors = <&zip_xy_to_scroll_mapper>;
         };
 
-        /* その他のレイヤー: カーソル移動（回転適用） */
+        /* その他のレイヤー: カーソル移動 */
         default_movement {
             layers = <0 1 2 3 4 6>;
-            input-processors = <&trackball_rotate>;
+            /* ★修正★ cells=1 に合わせたので、ダミー引数「0」を追加 */
+            input-processors = <&trackball_rotate 0>;
         };
     };
 };
