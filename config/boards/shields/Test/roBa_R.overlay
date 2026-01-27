@@ -8,12 +8,12 @@
     col-offset = <6>;
 };
 
-/* 1. キーマトリクスの修正 */
-/* 列の数を5つに保ちつつ、D9ピン(xiao_d 9)の競合を避けるためダミーピンに割り当てます */
+/* ▼▼▼ 1. キーマトリクス設定（接続エラー対策） ▼▼▼ */
+/* 列数を5に保つため、D9ピンの箇所を未使用ピン(P0.11)で埋めています */
 &kscan0 {
     col-gpios
         = <&xiao_d 10 GPIO_ACTIVE_HIGH>
-        , <&gpio0 11 GPIO_ACTIVE_HIGH>  /* D9の代わりに未使用ピン(P0.11)をダミーとして設定 */
+        , <&gpio0 11 GPIO_ACTIVE_HIGH> 
         , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
         , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
         , <&gpio0 10 GPIO_ACTIVE_HIGH>
@@ -22,33 +22,34 @@
 
 &i2c0 { status = "disabled"; };
 
-/* 2. トラックボールの回転設定（90度補正用） */
-/* XとYを入れ替え(Swap)し、必要なら反転(Invert)させます */
+/* ▼▼▼ 2. 回転設定（ビルドエラー対策済み） ▼▼▼ */
+/* 90度回転用にXYを入れ替え、補正します */
 / {
-    trackball_rotate: trackball_rotate {
-        compatible = "zmk,input-processor-transform";
-        xy-swap;
-        x-invert; /* 90度回転の場合、Swapに加えて片方の軸の反転が必要なことが多いです */
-    };
+  trackball_rotate: trackball_rotate {
+      compatible = "zmk,input-processor-transform";
+      xy-swap;
+      x-invert;
+      /* 必須プロパティを追加 */
+      x-codes = <INPUT_REL_X>;
+      y-codes = <INPUT_REL_Y>;
+  };
 };
 
-/* 3. トラックボール設定 */
+/* ▼▼▼ 3. トラックボール動作設定 ▼▼▼ */
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
-        /* ① レイヤー5の時：スクロール */
+        /* レイヤー5: スクロール */
         scroller {
             layers = <5>;
-            /* スクロールマッパーを適用 */
             input-processors = <&zip_xy_to_scroll_mapper>;
         };
 
-        /* ② それ以外の時：カーソル移動（回転補正付き） */
+        /* その他のレイヤー: カーソル移動（回転適用） */
         default_movement {
             layers = <0 1 2 3 4 6>;
-            /* 定義した回転設定を適用 */
             input-processors = <&trackball_rotate>;
         };
     };
