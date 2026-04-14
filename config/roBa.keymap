@@ -55,7 +55,7 @@
 &kp Q             &kp W         &kp E                     &kp R      &kp T                                                   &kp Y        &kp U  &lt 4 I    &kp O    &kp P
 &kp A             &kp S         &kp D                     &kp F      &kp G                 &lt 4 HOME       &kp END          &kp H        &kp J  &kp K      &kp L    &kp BACKSPACE
 &mt LEFT_SHIFT Z  &kp X         &kp C                     &kp V      &kp B                 &lt 5 SLASH      &mt RCTRL MINUS  &kp N        &kp M  &kp COMMA  &kp DOT  &kp POUND
-&mkp MB2          &kp LEFT_WIN  &mt LEFT_ALT EXCLAMATION  &kp LG(H)  &mt LEFT_SHIFT SPACE  &mkp MB1         &lt 0 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESC
+&mkp MB2          &kp LEFT_WIN  &mt LEFT_ALT EXCLAMATION  &kp LG(Y)  &mt LEFT_SHIFT SPACE  &mkp MB1         &lt 0 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESC
             >;
         };
 
