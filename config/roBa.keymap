@@ -1,14 +1,16 @@
+#include <dt-bindings/zmk/mouse.h>
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/zmk/pointing.h>
 
 #ifndef SCROLL_UP
+
 #define SCROLL_UP 0x01
 #define SCROLL_DOWN 0x02
 #define SCROLL_LEFT 0x04
 #define SCROLL_RIGHT 0x08
+
 #endif
 
 #define MOUSE 4
@@ -51,7 +53,7 @@
 &kp Q     &kp W         &kp E              &kp R      &kp T                                                      &kp Y        &kp U  &kp I      &kp O    &kp P
 &kp A     &kp S         &kp D              &kp F      &kp G                 &lt 4 LC(HOME)      &kp END          &kp H        &kp J  &kp K      &kp L    &kp BACKSPACE
 &kp Z     &kp X         &kp C              &kp V      &kp B                 &lt 5 SLASH         &mt RCTRL MINUS  &kp N        &kp M  &kp COMMA  &kp DOT  &kp HASH
-&mkp MB2  &kp LEFT_WIN  &mt LEFT_ALT EXCL  &kp LG(H)  &mt LEFT_SHIFT SPACE  &mkp MB1            &lt 2 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESCAPE
+&mkp MB2  &kp LEFT_WIN  &mt LEFT_ALT EXCL  &kp LG(Y)  &mt LEFT_SHIFT SPACE  &mkp MB1            &lt 2 LC(SPACE)  &lt 1 ENTER                             &mt DEL ESCAPE
             >;
         };
 
@@ -95,10 +97,10 @@
 
         SCROLL {
             bindings = <
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans          &trans           &trans           &trans
+&trans  &trans  &trans  &trans  &trans                      &trans            &trans            &trans          &trans             &trans
 &trans  &trans  &trans  &trans  &trans  &trans      &trans  &msc SCROLL_LEFT  &msc SCROLL_DOWN  &msc SCROLL_UP  &msc SCROLL_RIGHT  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans          &trans           &trans           &trans           &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                                      &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans            &trans            &trans          &trans             &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                                                                 &trans
             >;
         };
     };
